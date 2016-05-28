@@ -1,0 +1,17 @@
+body {
+   background-color: #212429;
+   color: #61D6C4;
+}
+
+.preload {
+    position: fixed;
+    z-index:99999;
+    top:0; left:0;
+    width:100%; height:100%;
+    opacity:1;
+    background-color:#212429;
+    background-image:url('https://i.imgflip.com/14op1e.gif');
+    background-size:298px 298px;
+    background-position:center;
+    background-repeat:no-repeat;
+}
