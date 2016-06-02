@@ -1,0 +1,14 @@
+formLogin :: Form (Text,Text)
+formLogin = renderDivs $ (,) <$>
+           areq textField "Login: " Nothing <*>
+           areq passwordField "Senha: " Nothing
+           
+getLoginR :: Handler Html
+getLoginR = do
+           (widget, enctype) <- generateFormPost formLogin
+           defaultLayout $ do
+           toWidget $ $(luciusFile "templates/login.lucius")
+           toWidgetHead [hamlet|
+             <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
+           |]
+           $(whamletFile "templates/login.hamlet")

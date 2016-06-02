@@ -10,6 +10,26 @@ body {
     padding-left: 25%;
 }
 
+button{
+	padding: 1rem 2rem;
+    margin-left: 27%;
+    font-family: 'Orbitron', sans-serif;
+    border: 0;
+    border-bottom: 3px solid;
+    font-size: 200%;
+    cursor: pointer;
+    margin-top: -3px;
+    color: #fff;
+    background-color: #61D6C4;
+    border-color: #71918C;
+    width: 20%;
+}
+
+button:active{
+	margin-top:0px;
+	border: 0;
+}
+
 .preload {
     position: fixed;
     z-index:99999;

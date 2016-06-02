@@ -1,0 +1,11 @@
+body {
+   background-color: #212429;
+   color: #61D6C4;
+   font-family: 'Orbitron', sans-serif;
+   font-size: 500%;
+}
+
+#logForm{
+    padding-top: 25%;
+    padding-left: 40%;
+}
