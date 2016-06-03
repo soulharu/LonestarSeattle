@@ -12,12 +12,3 @@ getLoginR = do
              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
            $(whamletFile "templates/login.hamlet")
-           
-           
-           
-postCadastroR :: Handler Html
-postCadastroR = do
-           ((result, _), _) <- runFormPost formPoliciais
-           case result of 
-               FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
-               _ -> redirect ErroR

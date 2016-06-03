@@ -31,6 +31,7 @@ mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
 /denied ErroR GET
 /singup CadastroR GET POST
+/login LoginR GET
 /profile/#PoliciaisId PerfilR GET
 |]
 
@@ -59,6 +60,11 @@ formPoliciais = renderDivs $ Policiais <$>
            areq textField "SIN Type: " Nothing <*>
            areq intField "Matix ID: " Nothing <*>
            areq textField "Patente: " Nothing
+           
+formLogin :: Form (Text,Text)
+formLogin = renderDivs $ (,) <$>
+           areq textField "Login: " Nothing <*>
+           areq passwordField "Senha: " Nothing
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
@@ -93,6 +99,17 @@ postCadastroR = do
            case result of 
                FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
                _ -> redirect ErroR
+
+getLoginR :: Handler Html
+getLoginR = do
+           (widget, enctype) <- generateFormPost formLogin
+           defaultLayout $ do
+           toWidget $ $(luciusFile "templates/login.lucius")
+           toWidgetHead [hamlet|
+             <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
+           |]
+           $(whamletFile "templates/login.hamlet")
+
            
 getPerfilR :: PoliciaisId -> Handler Html
 getPerfilR uid = do

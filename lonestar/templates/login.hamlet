@@ -1,3 +1,4 @@
+<div id="logForm">
 <form method=post enctype=#{enctype} action=@{LoginR}>
    ^{widget}
    <input type="submit" value="Enviar">
