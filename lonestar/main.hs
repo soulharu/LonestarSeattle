@@ -31,9 +31,17 @@ mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
 /denied ErroR GET
 /singup CadastroR GET
+/profile/#PoliciaisId PerfilR GET
 |]
 
 instance Yesod HelloWorld
+
+instance YesodPersist HelloWorld where
+   type YesodPersistBackend HelloWorld = SqlBackend
+   runDB f = do
+       master <- getYesod
+       let pool = connPool master
+       runSqlPool f pool
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
@@ -79,6 +87,13 @@ getCadastroR = do
                      <input type="submit" value="Enviar">
            |]
            
+getPerfilR :: PoliciaisId -> Handler Html
+getPerfilR uid = do
+      user <- runDB $ get404 uid
+      defaultLayout $ do
+          toWidget $ $(luciusFile "templates/perfil.lucius")
+          $(whamletFile "templates/perfil.hamlet")
+
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 
