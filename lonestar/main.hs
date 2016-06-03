@@ -30,7 +30,7 @@ Policiais json
 mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
 /denied ErroR GET
-/singup CadastroR GET
+/singup CadastroR GET POST
 /profile/#PoliciaisId PerfilR GET
 |]
 
@@ -86,6 +86,13 @@ getCadastroR = do
                      ^{widget}
                      <input type="submit" value="Enviar">
            |]
+           
+postCadastroR :: Handler Html
+postCadastroR = do
+           ((result, _), _) <- runFormPost formPoliciais
+           case result of 
+               FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
+               _ -> redirect ErroR
            
 getPerfilR :: PoliciaisId -> Handler Html
 getPerfilR uid = do
