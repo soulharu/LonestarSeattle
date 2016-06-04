@@ -34,6 +34,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /login LoginR GET POST
 /adm AdminR GET
 /profile/#PoliciaisId PerfilR GET
+/leave LogoutR GET
 |]
 
 instance Yesod HelloWorld
@@ -138,6 +139,12 @@ getPerfilR uid = do
           toWidget $ $(luciusFile "templates/perfil.lucius")
           $(whamletFile "templates/perfil.hamlet")
 
+getLogoutR :: Handler Html
+getLogoutR = do
+     deleteSession "_ID"
+     defaultLayout [whamlet| 
+         <h1> flw mlk doido!
+     |]
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 
