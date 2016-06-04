@@ -31,7 +31,7 @@ mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
 /denied ErroR GET
 /singup CadastroR GET POST
-/login LoginR GET
+/login LoginR GET POST
 /adm AdminR GET
 /profile/#PoliciaisId PerfilR GET
 |]
@@ -110,6 +110,18 @@ getLoginR = do
              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
            $(whamletFile "templates/login.hamlet")
+
+postLoginR :: Handler Html
+postLoginR = do
+           ((result, _), _) <- runFormPost formLogin
+           case result of 
+               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
+               FormSuccess (login,senha) -> do 
+                   user <- runDB $ selectFirst [PoliciaisLogin ==. login, PoliciaisSenha ==. senha] []
+                   case user of
+                       Nothing -> redirect LoginR
+                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (PerfilR pid)
+
 
 getAdminR :: Handler Html
 getAdminR = defaultLayout $ do
