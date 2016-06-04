@@ -32,6 +32,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /denied ErroR GET
 /singup CadastroR GET POST
 /login LoginR GET
+/adm AdminR GET
 /profile/#PoliciaisId PerfilR GET
 |]
 
@@ -110,6 +111,13 @@ getLoginR = do
            |]
            $(whamletFile "templates/login.hamlet")
 
+getAdminR :: Handler Html
+getAdminR = defaultLayout $ do
+           toWidget $ $(luciusFile "templates/admin.lucius")
+           toWidgetHead [hamlet|
+             <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
+           |]
+           $(whamletFile "templates/admin.hamlet")
            
 getPerfilR :: PoliciaisId -> Handler Html
 getPerfilR uid = do
