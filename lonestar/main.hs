@@ -18,12 +18,55 @@ Policiais json
    nome Text
    idade Int
    raca Text
-   sinn Int
+   sinn Double
    sinntype Text
-   matrixid Int
+   matrixid Double
    patente Text
-   
    deriving Show
+   
+Crimes json
+   artigo Int
+   nome Text sqltype=varchar(30)
+   descricao Text
+   deriving Show
+
+Bioware json
+   nome Text sqltype=varchar(20)
+   descricao Text
+   deriving Show
+
+Cyberware json
+   nome Text sqltype=varchar(20)
+   descricao Text
+   deriving Show
+
+Runners json
+   nome Text  sqltype=varchar(50)
+   alias Text  sqltype=varchar(30)
+   idade Int
+   raca Text  sqltype=varchar (15)
+   sinn Double
+   sinntype Text  sqltype=varchar(20)
+   magiclicenses Double
+   fireweaponslicenses Double
+   lastseen Text
+   deriving Show
+   
+RunCyber
+   runid RunnersId
+   cyberid CyberwareId
+   UniqueRunCyber runid cyberid
+
+RunBio
+   runid RunnersId
+   bioid BiowareId
+   UniqueRunBio runid bioid
+
+RunCrime
+   runid RunnersId
+   crimeid CrimesId
+   UniqueRunCrime runid crimeid
+
 |]
 
 
@@ -38,6 +81,7 @@ mkYesod "HelloWorld" [parseRoutes|
 |]
 
 instance Yesod HelloWorld
+
 
 instance YesodPersist HelloWorld where
    type YesodPersistBackend HelloWorld = SqlBackend
@@ -58,9 +102,9 @@ formPoliciais = renderDivs $ Policiais <$>
            areq textField "Nome: " Nothing <*>
            areq intField "Idade: " Nothing <*>
            areq textField "Raça: " Nothing <*>
-           areq intField "SIN: " Nothing <*>
+           areq doubleField "SIN: " Nothing <*>
            areq textField "SIN Type: " Nothing <*>
-           areq intField "Matix ID: " Nothing <*>
+           areq doubleField "Matix ID: " Nothing <*>
            areq textField "Patente: " Nothing
            
 formLogin :: Form (Text,Text)
