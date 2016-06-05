@@ -80,7 +80,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /leave LogoutR GET
 /bioreg BioregR GET POST
 /cyreg CyberregR GET POST
-/crireg CrimeregR GET
+/crireg CrimeregR GET POST
 |]
 
 instance Yesod HelloWorld
@@ -251,6 +251,13 @@ getCrimeregR = do
                      ^{widget}
                      <input type="submit" value="Cadastrar">
            |]
+
+postCrimeregR :: Handler Html
+postCrimeregR = do
+            ((result,_),_) <- runFormPost formCrime
+            case result of
+                FormSuccess cri -> (runDB $ insert cri) >> defaultLayout [whamlet|<h1> Crime/Infração inserida!|]
+                _ -> redirect CrimeregR
 
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
