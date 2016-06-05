@@ -78,7 +78,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /adm AdminR GET
 /profile/#PoliciaisId PerfilR GET
 /leave LogoutR GET
-/bioreg BioregR GET
+/bioreg BioregR GET POST
 /cyreg CyberregR GET
 /crireg CrimeregR GET
 |]
@@ -219,6 +219,13 @@ getBioregR = do
                      ^{widget}
                      <input type="submit" value="Cadastrar">
            |]
+
+postBioregR :: Handler Html
+postBioregR = do
+            ((result,_),_) <- runFormPost formBio
+            case result of
+                FormSuccess bio -> (runDB $ insert bio) >> defaultLayout [whamlet|<h1> Bioware inserida!|]
+                _ -> redirect BioregR
 
 getCyberregR :: Handler Html
 getCyberregR = do

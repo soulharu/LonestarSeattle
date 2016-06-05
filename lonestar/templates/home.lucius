@@ -1,18 +1,25 @@
+html,body{
+    height: 100%
+}
+
 body {
    background-color: #212429;
    color: #61D6C4;
    font-family: 'Orbitron', sans-serif;
    font-size: 120%;
+   display: table;
+   margin: 0 auto;
 }
 
-#face{
-    padding-top: 25%;
-    padding-left: 25%;
+.wrapper {
+   display: table-cell;
+   vertical-align: middle;
+   height: 100%;
 }
 
 button{
-	padding: 1rem 2rem;
-    margin-left: 27%;
+	padding: .5em .5em;
+    margin-left: 30%;
     font-family: 'Orbitron', sans-serif;
     border: 0;
     border-bottom: 3px solid;
@@ -41,4 +48,24 @@ button:active{
     background-size:298px 298px;
     background-position:center;
     background-repeat:no-repeat;
+}
+
+a:link { 
+   text-decoration:none;
+   color: #fff;
+} 
+
+a:active {
+   text-decoration: none;
+   color: #fff;
+}
+
+a:visited {
+   text-decoration: none;
+   color: #fff;
+}
+
+a:hover {
+   text-decoration: none;
+   color: #fff;
 }
