@@ -79,6 +79,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /profile/#PoliciaisId PerfilR GET
 /leave LogoutR GET
 /bioreg BioregR GET
+/cyreg CyberregR GET
 |]
 
 instance Yesod HelloWorld
@@ -112,11 +113,20 @@ formLogin :: Form (Text,Text)
 formLogin = renderDivs $ (,) <$>
            areq textField "Login: " Nothing <*>
            areq passwordField "Senha: " Nothing
-           
+
+
+
 formBio :: Form Bioware
 formBio = renderDivs $ Bioware <$>
             areq textField "Nome: " Nothing <*>
             areq textField "Descrição: " Nothing
+
+formCyber :: Form Cyberware
+formCyber = renderDivs $ Cyberware <$>
+            areq textField "Nome: " Nothing <*>
+            areq textField "Descrição: " Nothing
+
+
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
@@ -205,8 +215,14 @@ getBioregR = do
                      <input type="submit" value="Cadastrar">
            |]
 
-
-
+getCyberregR :: Handler Html
+getCyberregR = do
+           (widget, enctype) <- generateFormPost formCyber
+           defaultLayout [whamlet|
+                 <form method=post enctype=#{enctype} action=@{CyberregR}>
+                     ^{widget}
+                     <input type="submit" value="Cadastrar">
+           |]
 
 
 
