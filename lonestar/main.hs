@@ -78,6 +78,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /adm AdminR GET
 /profile/#PoliciaisId PerfilR GET
 /leave LogoutR GET
+/bioreg BioregR GET
 |]
 
 instance Yesod HelloWorld
@@ -111,6 +112,11 @@ formLogin :: Form (Text,Text)
 formLogin = renderDivs $ (,) <$>
            areq textField "Login: " Nothing <*>
            areq passwordField "Senha: " Nothing
+           
+formBio :: Form Bioware
+formBio = renderDivs $ Bioware <$>
+            areq textField "Nome: " Nothing <*>
+            areq textField "Descrição: " Nothing
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
@@ -189,6 +195,20 @@ getLogoutR = do
      defaultLayout [whamlet| 
          <h1> flw mlk doido!
      |]
+
+getBioregR :: Handler Html
+getBioregR = do
+           (widget, enctype) <- generateFormPost formBio
+           defaultLayout [whamlet|
+                 <form method=post enctype=#{enctype} action=@{BioregR}>
+                     ^{widget}
+                     <input type="submit" value="Cadastrar">
+           |]
+
+
+
+
+
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 
