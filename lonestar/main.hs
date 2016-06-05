@@ -80,6 +80,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /leave LogoutR GET
 /bioreg BioregR GET
 /cyreg CyberregR GET
+/crireg CrimeregR GET
 |]
 
 instance Yesod HelloWorld
@@ -114,7 +115,11 @@ formLogin = renderDivs $ (,) <$>
            areq textField "Login: " Nothing <*>
            areq passwordField "Senha: " Nothing
 
-
+formCrime :: Form Crimes
+formCrime = renderDivs $ Crimes <$>
+            areq intField "Artigo: " Nothing <*>
+            areq textField "Nome: " Nothing <*>
+            areq textField "Descrição: " Nothing
 
 formBio :: Form Bioware
 formBio = renderDivs $ Bioware <$>
@@ -224,6 +229,14 @@ getCyberregR = do
                      <input type="submit" value="Cadastrar">
            |]
 
+getCrimeregR :: Handler Html
+getCrimeregR = do
+           (widget, enctype) <- generateFormPost formCrime
+           defaultLayout [whamlet|
+                 <form method=post enctype=#{enctype} action=@{CrimeregR}>
+                     ^{widget}
+                     <input type="submit" value="Cadastrar">
+           |]
 
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
