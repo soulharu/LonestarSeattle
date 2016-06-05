@@ -31,12 +31,12 @@ Crimes json
    deriving Show
 
 Bioware json
-   nome Text sqltype=varchar(20)
+   nome Text sqltype=varchar(40)
    descricao Text
    deriving Show
 
 Cyberware json
-   nome Text sqltype=varchar(20)
+   nome Text sqltype=varchar(40)
    descricao Text
    deriving Show
 
@@ -79,7 +79,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /profile/#PoliciaisId PerfilR GET
 /leave LogoutR GET
 /bioreg BioregR GET POST
-/cyreg CyberregR GET
+/cyreg CyberregR GET POST
 /crireg CrimeregR GET
 |]
 
@@ -235,7 +235,14 @@ getCyberregR = do
                      ^{widget}
                      <input type="submit" value="Cadastrar">
            |]
-
+           
+postCyberregR :: Handler Html
+postCyberregR = do
+            ((result,_),_) <- runFormPost formCyber
+            case result of
+                FormSuccess cyber -> (runDB $ insert cyber) >> defaultLayout [whamlet|<h1> Cyberware inserida!|]
+                _ -> redirect CyberregR
+                
 getCrimeregR :: Handler Html
 getCrimeregR = do
            (widget, enctype) <- generateFormPost formCrime
