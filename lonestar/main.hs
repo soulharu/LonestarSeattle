@@ -56,10 +56,10 @@ Runners json
    lastseen Text
    deriving Show
    
-RunCyber json
+Runcyber json
    runid RunnersId
    cyberid CyberwareId
-   UniqueRunCyber runid cyberid
+   UniqueRuncyber runid cyberid
 
 RunBio json
    runid RunnersId
@@ -87,6 +87,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /crireg CrimeregR GET POST
 /runreg RunregR GET POST
 /atch AttachR GET POST
+/check CheckR GET
 |]
 
 instance Yesod HelloWorld
@@ -150,8 +151,8 @@ formRunners = renderDivs $ Runners <$>
            areq doubleField "Licença de Armas de fogo: " Nothing <*>
            areq textField "Visto pela ultima vez em: " Nothing 
            
-formLinkCyber :: Form RunCyber
-formLinkCyber = renderDivs $ RunCyber <$>
+formLinkCyber :: Form Runcyber
+formLinkCyber = renderDivs $ Runcyber <$>
            areq (selectField rus) "Runner: " Nothing <*>
            areq (selectField cys) "Cyberware: " Nothing 
 
@@ -342,6 +343,17 @@ postAttachR = do
             case result of
                 FormSuccess rcy -> (runDB $ insert rcy) >> defaultLayout [whamlet|<h1> Viculado com Sucesso!|]
                 _ -> redirect AttachR
+
+getCheckR :: Handler Html
+getCheckR = do
+            runns <- runDB $ (rawSql "SELECT ??, ?? \
+                                   \FROM runcyber INNER JOIN runners \
+                                   \ON runcyber.runid=runners.id" [])::Handler [(Entity Runcyber, Entity Runners)]
+            defaultLayout [whamlet|
+               <h1> Lista de Runners
+               $forall (Entity oq bg, Entity _ runner) <- runns
+                  <p> #{fromSqlKey oq}: #{runnersNome runner}
+            |]
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 
