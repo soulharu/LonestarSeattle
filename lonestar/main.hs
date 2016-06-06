@@ -86,6 +86,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /cyreg CyberregR GET POST
 /crireg CrimeregR GET POST
 /runreg RunregR GET POST
+/atch AttachR GET
 |]
 
 instance Yesod HelloWorld
@@ -325,6 +326,15 @@ postRunregR = do
             case result of
                 FormSuccess rni -> (runDB $ insert rni) >> defaultLayout [whamlet|<h1> Meliante inserido!|]
                 _ -> redirect RunregR
+
+getAttachR :: Handler Html
+getAttachR = do
+           (widget, enctype) <- generateFormPost formLinkCyber
+           defaultLayout [whamlet|
+              <form method=post enctype=#{enctype} action=@{AttachR}>
+                 ^{widget}
+                 <input type="submit" value="Cadastrar">
+           |]
 
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
