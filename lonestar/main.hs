@@ -88,6 +88,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /runreg RunregR GET POST
 /atch AttachR GET POST
 /check CheckR GET
+/file/#RunnersId RunnR GET
 |]
 
 instance Yesod HelloWorld
@@ -346,14 +347,33 @@ postAttachR = do
 
 getCheckR :: Handler Html
 getCheckR = do
-            runns <- runDB $ (rawSql "SELECT ??, ?? \
+            runns <- runDB $ (rawSql "SELECT ??, ??, ?? \
                                    \FROM runcyber INNER JOIN runners \
-                                   \ON runcyber.runid=runners.id" [])::Handler [(Entity Runcyber, Entity Runners)]
+                                   \ON runcyber.runid=runners.id \
+                                   \INNER JOIN cyberware \
+                                   \ON runcyber.cyberid=cyberware.id" [])::Handler [(Entity Runcyber, Entity Runners, Entity Cyberware)]
             defaultLayout [whamlet|
                <h1> Lista de Runners
-               $forall (Entity oq bg, Entity _ runner) <- runns
-                  <p> #{fromSqlKey oq}: #{runnersNome runner}
+               $forall (Entity oq bg, Entity _ runner, Entity _ cy) <- runns
+                  <p> #{fromSqlKey oq}: #{runnersNome runner} #{cyberwareNome cy}
             |]
+
+getRunnR ::  RunnersId -> Handler Html
+getRunnR rid = do
+        x <- runDB $ get404 rid
+        defaultLayout [whamlet|
+            <ul>
+               <li> Nome: #{runnersNome x}
+               <li> Idade: #{runnersIdade x}
+               <li> Meatipo: #{runnersRaca x}
+               <li> Street Name: #{runnersAlias x}
+               <li> SIN: #{runnersSinn x}
+               <li> SIN Type: #{runnersSinntype x}
+               <li> Matrix ID: #{runnersMatrixid x}
+        |]
+
+
+
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 
