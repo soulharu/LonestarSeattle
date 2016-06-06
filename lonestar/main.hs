@@ -3,11 +3,14 @@
              MultiParamTypeClasses, DeriveDataTypeable,
              GeneralizedNewtypeDeriving, ViewPatterns, EmptyDataDecls #-}
 import Yesod
+import Yesod.Form.Jquery
+import Control.Applicative
 import Database.Persist.Postgresql
 import Data.Text
 import Text.Lucius
 import Text.Julius
 import Control.Monad.Logger (runStdoutLoggingT)
+
 
 data HelloWorld = HelloWorld{connPool :: ConnectionPool}
 
@@ -47,22 +50,23 @@ Runners json
    raca Text  sqltype=varchar (15)
    sinn Double
    sinntype Text  sqltype=varchar(20)
+   matrixid Double
    magiclicenses Double
    fireweaponslicenses Double
    lastseen Text
    deriving Show
    
-RunCyber
+RunCyber json
    runid RunnersId
    cyberid CyberwareId
    UniqueRunCyber runid cyberid
 
-RunBio
+RunBio json
    runid RunnersId
    bioid BiowareId
    UniqueRunBio runid bioid
 
-RunCrime
+RunCrime json
    runid RunnersId
    crimeid CrimesId
    UniqueRunCrime runid crimeid
@@ -81,6 +85,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /bioreg BioregR GET POST
 /cyreg CyberregR GET POST
 /crireg CrimeregR GET POST
+/runreg RunregR GET
 |]
 
 instance Yesod HelloWorld
@@ -130,6 +135,52 @@ formCyber :: Form Cyberware
 formCyber = renderDivs $ Cyberware <$>
             areq textField "Nome: " Nothing <*>
             areq textField "Descrição: " Nothing
+
+formRunners :: Form Runners
+formRunners = renderDivs $ Runners <$>
+           areq textField "Nome: " Nothing <*>
+           areq textField "Apelido: " Nothing <*>
+           areq intField "Idade: " Nothing <*>
+           areq textField "Metatipo: " Nothing <*>
+           areq doubleField "SIN: " Nothing <*>
+           areq textField "SIN Type: " Nothing <*>
+           areq doubleField "Matrix ID: " Nothing <*>
+           areq doubleField "Licença Magica: " Nothing <*>
+           areq doubleField "Licença de Armas de fogo: " Nothing <*>
+           areq textField "Visto pela ultima vez em: " Nothing 
+           
+formLinkCyber :: Form RunCyber
+formLinkCyber = renderDivs $ RunCyber <$>
+           areq (selectField rus) "Runner: " Nothing <*>
+           areq (selectField cys) "Cyberware: " Nothing 
+
+--formLinkBio :: Form RunBio
+--formLinkBio = renderDivs $ RunBio <$>
+--           areq (selectField rus) "Runner: " Nothing <*>
+--           areq (selectField bis) "Bioware: " Nothing <*> 
+
+--formLinkCrime :: Form RunCrime
+--formLinkCrime = renderDivs $ RunCrime <$>
+--           areq (selectField rus) "Runner: " Nothing <*>
+--           areq (selectField crs) "Crimes: " Nothing 
+
+
+rus = do
+       entidades <- runDB $ selectList [] [Asc RunnersAlias] 
+       optionsPairs $ fmap (\ent -> (runnersAlias $ entityVal ent, entityKey ent)) entidades
+
+cys = do
+       entidades <- runDB $ selectList [] [Asc CyberwareNome] 
+       optionsPairs $ fmap (\ent -> (cyberwareNome $ entityVal ent, entityKey ent)) entidades
+
+--bis = do
+--       entidades <- runDB $ selectList [] [Asc BiowareNome] 
+--       optionsPairs $ fmap (\ent -> (biowareNome $ entityVal ent, entityKey ent)) entidades
+       
+--crs = do
+--       entidades <- runDB $ selectList [] [Asc CrimesNome] 
+--       optionsPairs $ fmap (\ent -> (crimesNome $ entityVal ent, entityKey ent)) entidades
+
 
 
 
@@ -258,6 +309,17 @@ postCrimeregR = do
             case result of
                 FormSuccess cri -> (runDB $ insert cri) >> defaultLayout [whamlet|<h1> Crime/Infração inserida!|]
                 _ -> redirect CrimeregR
+
+getRunregR :: Handler Html
+getRunregR = do
+           (widget, enctype) <- generateFormPost formRunners
+           defaultLayout [whamlet|
+                 <form method=post enctype=#{enctype} action=@{RunregR}>
+                     ^{widget}
+                     <input type="submit" value="Cadastrar">
+           |]
+
+
 
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
