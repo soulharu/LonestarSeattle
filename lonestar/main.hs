@@ -89,6 +89,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /atch AttachR GET POST
 /check CheckR GET
 /file/#RunnersId RunnR GET
+/listr ListRunR GET
 |]
 
 instance Yesod HelloWorld
@@ -372,7 +373,26 @@ getRunnR rid = do
                <li> Matrix ID: #{runnersMatrixid x}
         |]
 
+postPessoaR :: RunnersId -> Handler Html
+postPessoaR rid = do
+     runDB $ delete rid
+     redirect ListRunR
 
+getListRunR :: Handler Html
+getListRunR = do
+             listaP <- runDB $ selectList [] [Asc RunnersNome]
+             defaultLayout $ [whamlet|
+                 <h1> Runners cadastrados:
+                 <table>
+                    $forall Entity rid runner <- listaP
+                        <tr>
+                           <td><a href=@{RunnR rid}> #{runnersNome runner} 
+                           <td><form method=post action=@{RunnR rid}> 
+                               <input type="submit" value="Deletar"><br>
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
 
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
