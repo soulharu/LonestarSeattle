@@ -1,17 +1,35 @@
-<div class="col-md-3 sidebar">
-    <div class="col-md-10 profile-pic">
-    <p><b> Login: #{policiaisLogin user}
-    <p><b> Pagina de #{policiaisNome user}
-    
-
-<div class="col-md-9 content">
-    Informações do Agente
-        <ul class="perfil-content">
-            <li> Nome: #{policiaisNome user}
-            <li> Idade: #{policiaisIdade user}
-            <li> Raça: #{policiaisRaca user}
-            <li> Patente: #{policiaisPatente user}
-            <li> SIN: #{policiaisSinn user}
-            <li> SIN Type: #{policiaisSinntype user}
-            <li> Matrix ID: #{policiaisMatrixid user}
+<div id="menu">
+   <nav>
+      <ul>
+         <li>
+            <a href=@{RunregR}> Registrar Runner
+         <li>
+            <a href=@{CyberregR}> Registrar Cyberware
+         <li>
+            <a href=@{AttachR}> Vincular Runner a Cyberware
+         <li>
+            <a href=@{ListRunR}> Listar Runners
+         <li>
+            <a href=@{ListCyR}> Listar Cyberwares
+         <li>
+            <a href=@{LogoutR}> Sair
             
+            
+<div class="principal">
+   <h1><b>Informações do Agente
+      <ul>
+         <li> Nome do Agente: #{policiaisNome user}
+         <li> Patente: #{policiaisPatente user}
+         <li> Idade: #{policiaisIdade user}
+         <li> Metatipo: #{policiaisRaca user}
+         <li> SIN: #{policiaisSinn user}
+         <li> SIN Type: #{policiaisSinntype user}
+         <li> Matrix ID: #{policiaisMatrixid user}
+            
+
+      
+      
+      
+      
+      
+      

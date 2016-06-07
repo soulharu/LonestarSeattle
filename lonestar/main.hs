@@ -88,8 +88,10 @@ mkYesod "HelloWorld" [parseRoutes|
 /runreg RunregR GET POST
 /atch AttachR GET POST
 /check CheckR GET
-/file/#RunnersId RunnR GET
+/file/#RunnersId RunnR GET POST
 /listr ListRunR GET
+/listc ListCyR GET
+/delcy/#CyberwareId DelCyR POST
 |]
 
 instance Yesod HelloWorld
@@ -257,6 +259,9 @@ getPerfilR uid = do
       user <- runDB $ get404 uid
       defaultLayout $ do
           toWidget $ $(luciusFile "templates/perfil.lucius")
+          toWidgetHead [hamlet|
+             <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
+           |]
           $(whamletFile "templates/perfil.hamlet")
 
 getLogoutR :: Handler Html
@@ -373,8 +378,8 @@ getRunnR rid = do
                <li> Matrix ID: #{runnersMatrixid x}
         |]
 
-postPessoaR :: RunnersId -> Handler Html
-postPessoaR rid = do
+postRunnR :: RunnersId -> Handler Html
+postRunnR rid = do
      runDB $ delete rid
      redirect ListRunR
 
@@ -388,12 +393,33 @@ getListRunR = do
                         <tr>
                            <td><a href=@{RunnR rid}> #{runnersNome runner} 
                            <td><form method=post action=@{RunnR rid}> 
-                               <input type="submit" value="Deletar"><br>
+                               <input type="submit" value="Deletar">
              |] >> toWidget [lucius|
                 form  { display:inline; }
                 input { background-color: #ecc; border:0;}
              |]
 
+getListCyR :: Handler Html
+getListCyR = do
+             listaP <- runDB $ selectList [] [Asc CyberwareNome]
+             defaultLayout $ [whamlet|
+                 <h1> Cyberware cadastrados:
+                 <table>
+                    $forall Entity cid cybers <- listaP
+                        <tr>
+                           <td>#{cyberwareNome cybers}
+                           <td>#{cyberwareDescricao cybers}
+                           <td><form method=post action=@{DelCyR cid}> 
+                               <input type="submit" value="Deletar">
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
+
+postDelCyR :: CyberwareId -> Handler Html
+postDelCyR cid = do
+     runDB $ delete cid
+     redirect ListCyR
 
 connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=isonzxoxadmqir password=wpDkE8ysUDGhWNfHoBZoCzx5CT port=5432"
 

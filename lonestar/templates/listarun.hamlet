@@ -1,0 +1,7 @@
+<h1> Runners cadastrados:
+   <table>
+      $forall Entity rid runner <- listaP
+         <tr>
+            <td><a href=@{RunnR rid}> #{runnersNome runner} 
+            <td><form method=post action=@{RunnR rid}> 
+               <input type="submit" value="Deletar">

@@ -1,4 +1,4 @@
 <div id="preload" class="preload">
 <div class="wrapper">
    <h1><b> Departamento de segurança Lonestar de Seattle
-   <button class="botao"><a href=@{LoginR}>ENTRAR</button>
+   <a href=@{LoginR}><button class="botao">ENTRAR</button>
