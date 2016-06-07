@@ -84,7 +84,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /singup CadastroR GET POST
 /login LoginR GET POST
 /adm AdminR GET
-/profile/#PoliciaisId PerfilR GET
+/profile/#PoliciaisId PerfilR GET POST
 /leave LogoutR GET
 /bioreg BioregR GET POST
 /cyreg CyberregR GET POST
@@ -269,6 +269,11 @@ getPerfilR uid = do
              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
           $(whamletFile "templates/perfil.hamlet")
+
+postPerfilR :: PoliciaisId -> Handler Html
+postPerfilR pid = do
+     runDB $ delete pid
+     redirect ListAgentR
 
 getLogoutR :: Handler Html
 getLogoutR = do
