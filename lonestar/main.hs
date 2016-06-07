@@ -217,11 +217,13 @@ getErroR = defaultLayout $ do
 getCadastroR :: Handler Html
 getCadastroR = do
            (widget, enctype) <- generateFormPost formPoliciais
-           defaultLayout [whamlet|
-                 <form method=post enctype=#{enctype} action=@{CadastroR}>
-                     ^{widget}
-                     <input type="submit" value="Enviar">
+           defaultLayout $ do
+           addStylesheet $ StaticR site_css
+           toWidget $ $(luciusFile "templates/agreg.lucius")
+           toWidgetHead [hamlet|
+              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
+           $(whamletFile "templates/agreg.hamlet")
            
 postCadastroR :: Handler Html
 postCadastroR = do
@@ -301,11 +303,13 @@ postBioregR = do
 getCyberregR :: Handler Html
 getCyberregR = do
            (widget, enctype) <- generateFormPost formCyber
-           defaultLayout [whamlet|
-                 <form method=post enctype=#{enctype} action=@{CyberregR}>
-                     ^{widget}
-                     <input type="submit" value="Cadastrar">
+           defaultLayout $ do
+           addStylesheet $ StaticR site_css
+           toWidget $ $(luciusFile "templates/cyreg.lucius")
+           toWidgetHead [hamlet|
+              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
+           $(whamletFile "templates/cyreg.hamlet")
            
 postCyberregR :: Handler Html
 postCyberregR = do

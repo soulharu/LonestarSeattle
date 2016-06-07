@@ -1,0 +1,6 @@
+<h1>Cadastro de Agentes
+
+<div class="logForm">
+   <form method=post enctype=#{enctype} action=@{CadastroR}>
+                     ^{widget}
+                     <input class="botao" type="submit" value="Cadastrar">

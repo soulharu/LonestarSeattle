@@ -1,0 +1,6 @@
+<h1>Cadastro de Cyberwares
+
+<div class="logForm">
+   <form method=post enctype=#{enctype} action=@{CyberregR}>
+                     ^{widget}
+                     <input class="botao" type="submit" value="Cadastrar">
