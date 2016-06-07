@@ -337,11 +337,13 @@ postCrimeregR = do
 getRunregR :: Handler Html
 getRunregR = do
            (widget, enctype) <- generateFormPost formRunners
-           defaultLayout [whamlet|
-                 <form method=post enctype=#{enctype} action=@{RunregR}>
-                     ^{widget}
-                     <input type="submit" value="Cadastrar">
+           defaultLayout $ do
+           addStylesheet $ StaticR site_css
+           toWidget $ $(luciusFile "templates/runreg.lucius")
+           toWidgetHead [hamlet|
+              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
+           $(whamletFile "templates/runreg.hamlet")
 
 postRunregR :: Handler Html
 postRunregR = do
@@ -353,11 +355,13 @@ postRunregR = do
 getAttachR :: Handler Html
 getAttachR = do
            (widget, enctype) <- generateFormPost formLinkCyber
-           defaultLayout [whamlet|
-              <form method=post enctype=#{enctype} action=@{AttachR}>
-                 ^{widget}
-                 <input type="submit" value="Cadastrar">
+           defaultLayout $ do
+           addStylesheet $ StaticR site_css
+           toWidget $ $(luciusFile "templates/vincula.lucius")
+           toWidgetHead [hamlet|
+              <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
            |]
+           $(whamletFile "templates/vincula.hamlet")
 
 postAttachR :: Handler Html
 postAttachR = do

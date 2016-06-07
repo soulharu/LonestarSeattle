@@ -1,4 +1,4 @@
 <div class="logForm">
-   <form method=post enctype=#{enctype} action=@{CadastroR}>
+   <form method=post enctype=#{enctype} action=@{RunregR}>
                      ^{widget}
                      <input class="botao" type="submit" value="Cadastrar">
