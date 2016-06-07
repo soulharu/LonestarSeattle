@@ -7,12 +7,4 @@ body {
    color: #61D6C4;
    font-family: 'Orbitron', sans-serif;
    font-size: 120%;
-   display: table;
-   margin: 0 auto;
-}
-
-.wrapper {
-   display: table-cell;
-   vertical-align: middle;
-   height: 100%;
 }

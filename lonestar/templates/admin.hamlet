@@ -1,1 +1,21 @@
-<h1><b> Bem vindo!
+<div id="menu">
+   <nav>
+      <ul>
+         <li>
+            <a href=@{RunregR}> Registrar Runner
+         <li>
+            <a href=@{CyberregR}> Registrar Cyberware
+         <li>
+            <a href=@{CadastroR}> Registrar Agente
+         <li>
+            <a href=@{AttachR}> Vincular Runner a Cyberware
+         <li>
+            <a href=@{ListRunR}> Listar Runners
+         <li>
+            <a href=@{ListCyR}> Listar Cyberwares
+         <li>
+            <a href=@{LogoutR}> Sair
+            
+            
+<div class="principal">
+   <h1> Bem-vindo Coronel Linguiça!

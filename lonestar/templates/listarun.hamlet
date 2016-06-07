@@ -1,5 +1,8 @@
 <h1> Runners cadastrados:
    <table>
+      <tr>
+         <th>Runners
+         <th>Excluir
       $forall Entity rid runner <- listaP
          <tr>
             <td><a href=@{RunnR rid}> #{runnersNome runner} 

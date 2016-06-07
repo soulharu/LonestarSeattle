@@ -1,6 +1,47 @@
+*{
+   margin: 0;
+   padding:0;
+}
+html,body{
+    height: 100%;
+}
+
 body {
    background-color: #212429;
    color: #61D6C4;
    font-family: 'Orbitron', sans-serif;
    font-size: 120%;
+}
+
+#menu{
+   background: #212429;
+   display: table;
+   width: 100%;
+   border-bottom: 5px solid  #61D6C4;
+}
+
+#menu ul {
+   list-style-type: none;
+}
+
+#menu ul li {
+   display: inline;
+}
+
+#menu ul li a {
+	background-color: #212429;
+	color: #61D6C4;
+	text-decoration: none;
+	float: left;
+	padding: .5rem .5rem;
+	margin-left: 1px;
+}
+
+#menu ul li a:hover {
+   color: #FFF;
+   background-color: #61D6C4;
+}
+
+.principal{
+   margin-top: 1rem;
 }

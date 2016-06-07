@@ -9,10 +9,13 @@ import Database.Persist.Postgresql
 import Data.Text
 import Text.Lucius
 import Text.Julius
+import Yesod.Static
 import Control.Monad.Logger (runStdoutLoggingT)
 
 
-data HelloWorld = HelloWorld{connPool :: ConnectionPool}
+data HelloWorld = HelloWorld{connPool :: ConnectionPool,
+                             getStatic :: Static
+                            }
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Policiais json
@@ -73,6 +76,7 @@ RunCrime json
 
 |]
 
+staticFiles "static"
 
 mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
@@ -92,6 +96,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /listr ListRunR GET
 /listc ListCyR GET
 /delcy/#CyberwareId DelCyR POST
+/static StaticR Static getStatic
 |]
 
 instance Yesod HelloWorld
@@ -386,35 +391,22 @@ postRunnR rid = do
 getListRunR :: Handler Html
 getListRunR = do
              listaP <- runDB $ selectList [] [Asc RunnersNome]
-             defaultLayout $ [whamlet|
-                 <h1> Runners cadastrados:
-                 <table>
-                    $forall Entity rid runner <- listaP
-                        <tr>
-                           <td><a href=@{RunnR rid}> #{runnersNome runner} 
-                           <td><form method=post action=@{RunnR rid}> 
-                               <input type="submit" value="Deletar">
-             |] >> toWidget [lucius|
-                form  { display:inline; }
-                input { background-color: #ecc; border:0;}
+             defaultLayout $ do
+             toWidget $ $(luciusFile "templates/listarun.lucius")
+             toWidgetHead [hamlet|
+                <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
              |]
+             $(whamletFile "templates/listarun.hamlet")
 
 getListCyR :: Handler Html
 getListCyR = do
              listaP <- runDB $ selectList [] [Asc CyberwareNome]
-             defaultLayout $ [whamlet|
-                 <h1> Cyberware cadastrados:
-                 <table>
-                    $forall Entity cid cybers <- listaP
-                        <tr>
-                           <td>#{cyberwareNome cybers}
-                           <td>#{cyberwareDescricao cybers}
-                           <td><form method=post action=@{DelCyR cid}> 
-                               <input type="submit" value="Deletar">
-             |] >> toWidget [lucius|
-                form  { display:inline; }
-                input { background-color: #ecc; border:0;}
+             defaultLayout $ do
+             toWidget $ $(luciusFile "templates/listacyber.lucius")
+             toWidgetHead [hamlet|
+                <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
              |]
+             $(whamletFile "templates/listacyber.hamlet")
 
 postDelCyR :: CyberwareId -> Handler Html
 postDelCyR cid = do
@@ -426,4 +418,5 @@ connStr = "dbname=d3asuujt2vg6o1 host=ec2-54-163-226-48.compute-1.amazonaws.com 
 main::IO()
 main = runStdoutLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $ do 
        runSqlPersistMPool (runMigration migrateAll) pool
-       warp 8080 (HelloWorld pool)
+       t@(Static settings) <- static "static"
+       warp 8080 (HelloWorld pool t)

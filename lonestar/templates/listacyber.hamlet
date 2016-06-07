@@ -1,0 +1,12 @@
+<h1> Runners cadastrados:
+   <table>
+      <tr>
+         <th>Runners
+         <th>Descrição
+         <th>Excluir
+      $forall Entity cid cybers <- listaP
+         <tr>
+            <td>#{cyberwareNome cybers}
+            <td>#{cyberwareDescricao cybers}
+            <td><form method=post action=@{DelCyR cid}> 
+               <input type="submit" value="Deletar">
