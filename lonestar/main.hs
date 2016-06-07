@@ -93,6 +93,7 @@ mkYesod "HelloWorld" [parseRoutes|
 /atch AttachR GET POST
 /check CheckR GET
 /file/#RunnersId RunnR GET POST
+/listp ListAgentR GET
 /listr ListRunR GET
 /listc ListCyR GET
 /delcy/#CyberwareId DelCyR POST
@@ -387,6 +388,16 @@ postRunnR :: RunnersId -> Handler Html
 postRunnR rid = do
      runDB $ delete rid
      redirect ListRunR
+
+getListAgentR :: Handler Html
+getListAgentR = do
+             listaP <- runDB $ selectList [] [Asc PoliciaisNome]
+             defaultLayout $ do
+             toWidget $ $(luciusFile "templates/listaagent.lucius")
+             toWidgetHead [hamlet|
+                <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Orbitron">
+             |]
+             $(whamletFile "templates/listaagent.hamlet")
 
 getListRunR :: Handler Html
 getListRunR = do

@@ -1,0 +1,10 @@
+<h1> Agentes cadastrados:
+   <table>
+      <tr>
+         <th>Agentes
+         <th>Excluir
+      $forall Entity aid agent <- listaP
+         <tr>
+            <td><a href=@{PerfilR aid}#> #{policiaisNome agent} 
+            <td><form method=post action=@{PerfilR aid}> 
+               <input type="submit" value="Deletar">

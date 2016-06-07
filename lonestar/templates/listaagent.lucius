@@ -1,0 +1,51 @@
+html,body{
+    height: 100%;
+}
+
+body {
+   background-color: #212429;
+   color: #61D6C4;
+   font-family: 'Orbitron', sans-serif;
+   font-size: 120%;
+}
+
+th{
+   color:#FFF;
+   background-color: #61D6C4;
+}
+
+h1{
+    text-align: center;
+}
+
+form  {
+   display:inline;
+}
+
+input {
+   color: #FFF;
+    background-color: #61D6C4;
+    border: 0;
+    font-size: 100%;
+    padding: 1rem 1rem;
+}
+
+a{
+   text-decoration: none;
+   color: inherit;
+}
+
+
+table{
+   width: 100%;
+   margin-bottom : .5em;
+   border-collapse: collapse;
+   border-spacing: 0;
+}
+
+td, th {
+	padding: .5em;
+    margin: 0;
+    border: 1px solid #61D6C4;
+    text-align: center;
+}
